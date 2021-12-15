@@ -187,11 +187,14 @@ class TickerBase():
             headers=utils.user_agent_headers,
             timeout=timeout
         )
-        if "Will be right back" in data.text:
+        if "Will be right back" in data.text or data is None:
             raise RuntimeError("*** YAHOO! FINANCE IS CURRENTLY DOWN! ***\n"
                                "Our engineers are working quickly to resolve "
                                "the issue. Thank you for your patience.")
-        data = data.json()
+        try:
+            data = data.json()
+        except Exception:
+            pass
 
         # Work with errors
         debug_mode = True
